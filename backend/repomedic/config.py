@@ -1,7 +1,7 @@
 """Configuration settings for RepoMedic loaded from environment variables and .env files."""
 
 import os
-from typing import List, Optional
+from typing import List, Optional, Union
 from pydantic import AliasChoices, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -23,12 +23,12 @@ class Settings(BaseSettings):
     )
     REPOMEDIC_HOST: str = Field(
         default="127.0.0.1",
-        validation_alias=AliasChoices("REPOMEDIC_HOST", "REPMEDIC_HOST"),
+        validation_alias=AliasChoices("HOST", "REPOMEDIC_HOST", "REPMEDIC_HOST"),
         description="Host interface to bind HTTP server"
     )
     REPOMEDIC_PORT: int = Field(
         default=8000,
-        validation_alias=AliasChoices("REPOMEDIC_PORT", "REPMEDIC_PORT"),
+        validation_alias=AliasChoices("PORT", "REPOMEDIC_PORT", "REPMEDIC_PORT"),
         description="Port to bind HTTP server"
     )
 
@@ -38,7 +38,7 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("REPOMEDIC_API_KEY", "REPMEDIC_API_KEY"),
         description="API key required for scan submission in production"
     )
-    REPOMEDIC_CORS_ORIGINS: List[str] = Field(
+    REPOMEDIC_CORS_ORIGINS: Union[str, List[str]] = Field(
         default_factory=lambda: ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:3000", "http://127.0.0.1:5173"],
         validation_alias=AliasChoices("REPOMEDIC_CORS_ORIGINS", "REPMEDIC_CORS_ORIGINS"),
         description="Allowed CORS origins"
@@ -49,7 +49,7 @@ class Settings(BaseSettings):
     GROQ_MODEL: Optional[str] = Field(default=None, description="Explicit override for Groq model identifier")
     GROQ_TIMEOUT_SECONDS: float = Field(default=30.0, description="Timeout for Groq inference requests")
     GROQ_DISCOVERY_CACHE_TTL_SECONDS: int = Field(default=3600, description="Model discovery cache duration in seconds")
-    GROQ_MODEL_PREFERENCES: List[str] = Field(
+    GROQ_MODEL_PREFERENCES: Union[str, List[str]] = Field(
         default_factory=lambda: [
             "openai/gpt-oss-20b",
             "llama-3.3-70b-versatile",
@@ -134,18 +134,77 @@ class Settings(BaseSettings):
     @field_validator("REPOMEDIC_CORS_ORIGINS", mode="before")
     @classmethod
     def parse_cors_origins(cls, value):
+        if value is None:
+            return ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:3000", "http://127.0.0.1:5173"]
         if isinstance(value, str):
             trimmed = value.strip()
+            if not trimmed:
+                return ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:3000", "http://127.0.0.1:5173"]
+            # Strip outer quotes if enclosed in single or double quotes
+            if (trimmed.startswith("'") and trimmed.endswith("'")) or (trimmed.startswith('"') and trimmed.endswith('"')):
+                trimmed = trimmed[1:-1].strip()
             if trimmed.startswith("[") and trimmed.endswith("]"):
                 try:
                     import json
                     parsed = json.loads(trimmed)
                     if isinstance(parsed, list):
-                        return [str(x).strip() for x in parsed if str(x).strip()]
+                        return [str(x).strip().strip("'\"") for x in parsed if str(x).strip().strip("'\"")]
                 except Exception:
                     pass
-            return [x.strip() for x in trimmed.split(",") if x.strip()]
-        return value
+                try:
+                    import ast
+                    parsed = ast.literal_eval(trimmed)
+                    if isinstance(parsed, (list, tuple)):
+                        return [str(x).strip().strip("'\"") for x in parsed if str(x).strip().strip("'\"")]
+                except Exception:
+                    inner = trimmed[1:-1].strip()
+                    return [x.strip().strip("'\"") for x in inner.split(",") if x.strip().strip("'\"")]
+            return [x.strip().strip("'\"") for x in trimmed.split(",") if x.strip().strip("'\"")]
+        if isinstance(value, (list, tuple, set)):
+            return [str(x).strip().strip("'\"") for x in value if str(x).strip().strip("'\"")]
+        return [str(value).strip().strip("'\"")]
+
+    @field_validator("GROQ_MODEL_PREFERENCES", mode="before")
+    @classmethod
+    def parse_groq_preferences(cls, value):
+        if value is None:
+            return [
+                "openai/gpt-oss-20b",
+                "llama-3.3-70b-versatile",
+                "llama-3.1-8b-instant",
+                "mixtral-8x7b-32768",
+            ]
+        if isinstance(value, str):
+            trimmed = value.strip()
+            if not trimmed:
+                return [
+                    "openai/gpt-oss-20b",
+                    "llama-3.3-70b-versatile",
+                    "llama-3.1-8b-instant",
+                    "mixtral-8x7b-32768",
+                ]
+            if (trimmed.startswith("'") and trimmed.endswith("'")) or (trimmed.startswith('"') and trimmed.endswith('"')):
+                trimmed = trimmed[1:-1].strip()
+            if trimmed.startswith("[") and trimmed.endswith("]"):
+                try:
+                    import json
+                    parsed = json.loads(trimmed)
+                    if isinstance(parsed, list):
+                        return [str(x).strip().strip("'\"") for x in parsed if str(x).strip().strip("'\"")]
+                except Exception:
+                    pass
+                try:
+                    import ast
+                    parsed = ast.literal_eval(trimmed)
+                    if isinstance(parsed, (list, tuple)):
+                        return [str(x).strip().strip("'\"") for x in parsed if str(x).strip().strip("'\"")]
+                except Exception:
+                    inner = trimmed[1:-1].strip()
+                    return [x.strip().strip("'\"") for x in inner.split(",") if x.strip().strip("'\"")]
+            return [x.strip().strip("'\"") for x in trimmed.split(",") if x.strip().strip("'\"")]
+        if isinstance(value, (list, tuple, set)):
+            return [str(x).strip().strip("'\"") for x in value if str(x).strip().strip("'\"")]
+        return [str(value).strip().strip("'\"")]
 
     @property
     def is_production(self) -> bool:
