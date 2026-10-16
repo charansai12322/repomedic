@@ -1,0 +1,15 @@
+{
+  "fixture_id": "fix-14-eval-injection",
+  "name": "JavaScript Dynamic Eval Injection",
+  "description": "Direct dynamic code execution via JavaScript eval().",
+  "is_negative_control": false,
+  "expected_findings": [
+    {
+      "category": "js_eval",
+      "rule_id": "js_eval",
+      "file_path": "calc.js",
+      "approximate_line": 2,
+      "severity": "high"
+    }
+  ]
+}

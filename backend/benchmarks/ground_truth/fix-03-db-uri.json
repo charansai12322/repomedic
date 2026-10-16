@@ -1,0 +1,15 @@
+{
+  "fixture_id": "fix-03-db-uri",
+  "name": "Database URI with Hardcoded Password",
+  "description": "Database connection script embedding raw database credentials.",
+  "is_negative_control": false,
+  "expected_findings": [
+    {
+      "category": "secret",
+      "rule_id": "SECRET_DB_URI",
+      "file_path": "database.py",
+      "approximate_line": 2,
+      "severity": "high"
+    }
+  ]
+}

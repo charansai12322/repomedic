@@ -1,0 +1,15 @@
+{
+  "fixture_id": "fix-06-sqli-fstring",
+  "name": "SQL Injection via String Formatting",
+  "description": "Database query executed using an f-string instead of parameterized inputs.",
+  "is_negative_control": false,
+  "expected_findings": [
+    {
+      "category": "sql_injection",
+      "rule_id": "sql_string_building",
+      "file_path": "repo.py",
+      "approximate_line": 3,
+      "severity": "high"
+    }
+  ]
+}

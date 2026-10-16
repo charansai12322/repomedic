@@ -1,0 +1,15 @@
+{
+  "fixture_id": "fix-07-pickle-loads",
+  "name": "Insecure Deserialization via Pickle",
+  "description": "Unpickling untrusted payload data directly.",
+  "is_negative_control": false,
+  "expected_findings": [
+    {
+      "category": "unsafe_deserialization",
+      "rule_id": "AST_PICKLE_UNSAFE",
+      "file_path": "cache.py",
+      "approximate_line": 4,
+      "severity": "high"
+    }
+  ]
+}

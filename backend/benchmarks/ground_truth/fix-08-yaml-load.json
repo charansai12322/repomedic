@@ -1,0 +1,15 @@
+{
+  "fixture_id": "fix-08-yaml-load",
+  "name": "Insecure YAML Load",
+  "description": "Parsing YAML with yaml.load without specifying a safe Loader.",
+  "is_negative_control": false,
+  "expected_findings": [
+    {
+      "category": "unsafe_yaml_load",
+      "rule_id": "AST_YAML_UNSAFE",
+      "file_path": "loader.py",
+      "approximate_line": 4,
+      "severity": "high"
+    }
+  ]
+}

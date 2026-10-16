@@ -1,0 +1,15 @@
+{
+  "fixture_id": "fix-09-alias-os-system",
+  "name": "Aliased Import for os.system",
+  "description": "Evading simple name matching by importing os.system as sys_exec.",
+  "is_negative_control": false,
+  "expected_findings": [
+    {
+      "category": "dangerous_os_call",
+      "rule_id": "AST_OS_SYSTEM",
+      "file_path": "runner.py",
+      "approximate_line": 4,
+      "severity": "high"
+    }
+  ]
+}

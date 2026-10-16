@@ -1,0 +1,15 @@
+{
+  "fixture_id": "fix-12-flask-debug",
+  "name": "Framework Debug Mode Enabled",
+  "description": "Flask app running with debug=True which exposes interactive debugger.",
+  "is_negative_control": false,
+  "expected_findings": [
+    {
+      "category": "debug_mode_enabled",
+      "rule_id": "debug_mode_enabled",
+      "file_path": "app.py",
+      "approximate_line": 5,
+      "severity": "medium"
+    }
+  ]
+}

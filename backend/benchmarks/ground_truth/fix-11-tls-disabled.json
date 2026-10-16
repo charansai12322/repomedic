@@ -1,0 +1,15 @@
+{
+  "fixture_id": "fix-11-tls-disabled",
+  "name": "TLS Certificate Verification Disabled",
+  "description": "HTTP request with verify=False disabling certificate checks.",
+  "is_negative_control": false,
+  "expected_findings": [
+    {
+      "category": "insecure_tls",
+      "rule_id": "tls_verification_off",
+      "file_path": "client.py",
+      "approximate_line": 4,
+      "severity": "high"
+    }
+  ]
+}

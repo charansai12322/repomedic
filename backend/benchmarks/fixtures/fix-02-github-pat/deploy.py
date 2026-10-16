@@ -1,0 +1,3 @@
+# Deployment automation
+GITHUB_TOKEN = 'ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+REPO = 'owner/repo'

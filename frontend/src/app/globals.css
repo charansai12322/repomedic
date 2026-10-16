@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+:root {
+  /* RepoMedic Master Design System Palette (Section 03.1) */
+  --canvas: #0D1117;
+  --navigation: #010409;
+  --surface: #161B22;
+  --surface-elevated: #21262D;
+  --border: #30363D;
+  --border-subtle: #21262D;
+  --text-primary: #E6EDF3;
+  --text-secondary: #8B949E;
+  --text-muted: #6E7681;
+  --accent-blue: #58A6FF;
+  --accent-hover: #79C0FF;
+  --success: #3FB950;
+  --warning: #D29922;
+  --danger: #F85149;
+  --info: #58A6FF;
+
+  /* Typography scale */
+  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Motion tokens (Section 14.1) */
+  --motion-fast: 140ms;
+  --motion-standard: 200ms;
+  --motion-panel: 260ms;
+  --motion-score: 850ms;
+  --ease-workbench: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@theme {
+  --color-canvas: var(--canvas);
+  --color-navigation: var(--navigation);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-border-default: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-hover: var(--accent-hover);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: var(--canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle workbench scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--navigation);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-elevated);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border);
+}
+
+/* Reduced motion honoring (Section 14.5) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Keyframe animations for score arc and indeterminate progress */
+@keyframes drawArc {
+  from {
+    stroke-dashoffset: 283;
+  }
+}
+
+@keyframes indeterminateProgress {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(30%);
+  }
+  100% {
+    transform: translateX(110%);
+  }
+}
+
+.animate-indeterminate {
+  animation: indeterminateProgress 1.6s infinite ease-in-out;
+}
+
+/* Code block line number support */
+.code-line-number {
+  user-select: none;
+  color: var(--text-muted);
+  text-align: right;
+  padding-right: 0.75rem;
+  border-right: 1px solid var(--border-subtle);
+}

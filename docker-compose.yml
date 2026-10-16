@@ -1,0 +1,46 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: repomedic-backend:latest
+    container_name: repomedic-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - REPOMEDIC_ENV=production
+      - REPMEDIC_ENV=production
+      - REPOMEDIC_API_KEY=${REPOMEDIC_API_KEY:-${REPMEDIC_API_KEY:-repomedic_default_key_secure_change_me}}
+      - REPMEDIC_API_KEY=${REPOMEDIC_API_KEY:-${REPMEDIC_API_KEY:-repomedic_default_key_secure_change_me}}
+      - REPOMEDIC_CORS_ORIGINS=${REPOMEDIC_CORS_ORIGINS:-["http://localhost:3000","http://127.0.0.1:3000"]}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - GROQ_MODEL=${GROQ_MODEL:-llama-3.3-70b-versatile}
+      - REPOMEDIC_ENABLE_GIT_HISTORY=false
+      - REPOMEDIC_MAX_CONCURRENT_SCANS=2
+      - REPOMEDIC_MAX_HISTORY_COMMITS=50
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: repomedic-frontend:latest
+    container_name: repomedic-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REPOMEDIC_BACKEND_URL=http://backend:8000
+      - REPMEDIC_BACKEND_URL=http://backend:8000
+      - REPOMEDIC_API_KEY=${REPOMEDIC_API_KEY:-${REPMEDIC_API_KEY:-repomedic_default_key_secure_change_me}}
+      - REPMEDIC_API_KEY=${REPOMEDIC_API_KEY:-${REPMEDIC_API_KEY:-repomedic_default_key_secure_change_me}}
+      - NODE_ENV=production
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped

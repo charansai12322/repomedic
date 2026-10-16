@@ -1,0 +1,15 @@
+{
+  "fixture_id": "fix-05-subprocess-shell",
+  "name": "Subprocess Shell True",
+  "description": "Task runner executing commands via shell=True enabling command injection.",
+  "is_negative_control": false,
+  "expected_findings": [
+    {
+      "category": "subprocess_shell",
+      "rule_id": "AST_SUBPROCESS_SHELL",
+      "file_path": "tasks.py",
+      "approximate_line": 4,
+      "severity": "high"
+    }
+  ]
+}

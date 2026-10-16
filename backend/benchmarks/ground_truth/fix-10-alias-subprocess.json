@@ -1,0 +1,15 @@
+{
+  "fixture_id": "fix-10-alias-subprocess",
+  "name": "Aliased Subprocess Module Call",
+  "description": "Subprocess module imported as sp and invoked with shell=True.",
+  "is_negative_control": false,
+  "expected_findings": [
+    {
+      "category": "subprocess_shell",
+      "rule_id": "AST_SUBPROCESS_SHELL",
+      "file_path": "worker.py",
+      "approximate_line": 4,
+      "severity": "high"
+    }
+  ]
+}

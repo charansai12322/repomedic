@@ -1,0 +1,15 @@
+{
+  "fixture_id": "fix-04-private-key",
+  "name": "Private Key PEM Block",
+  "description": "Certificate storage containing raw RSA private key block.",
+  "is_negative_control": false,
+  "expected_findings": [
+    {
+      "category": "secret",
+      "rule_id": "SECRET_PRIVATE_KEY_BLOCK",
+      "file_path": "server.pem",
+      "approximate_line": 1,
+      "severity": "high"
+    }
+  ]
+}

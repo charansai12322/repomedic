@@ -1,0 +1,15 @@
+{
+  "fixture_id": "fix-13-weak-hash",
+  "name": "Weak Hash Algorithm (MD5)",
+  "description": "Use of MD5 for hashing sensitive data.",
+  "is_negative_control": false,
+  "expected_findings": [
+    {
+      "category": "weak_hash",
+      "rule_id": "weak_hash",
+      "file_path": "auth.py",
+      "approximate_line": 4,
+      "severity": "medium"
+    }
+  ]
+}

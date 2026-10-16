@@ -1,0 +1,15 @@
+{
+  "fixture_id": "fix-02-github-pat",
+  "name": "Hardcoded Synthetic GitHub PAT",
+  "description": "Deployment script embedding a synthetic GitHub personal access token.",
+  "is_negative_control": false,
+  "expected_findings": [
+    {
+      "category": "secret",
+      "rule_id": "SECRET_GITHUB_PAT",
+      "file_path": "deploy.py",
+      "approximate_line": 2,
+      "severity": "high"
+    }
+  ]
+}

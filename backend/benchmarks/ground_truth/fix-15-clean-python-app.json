@@ -1,0 +1,7 @@
+{
+  "fixture_id": "fix-15-clean-python-app",
+  "name": "Clean Python Utility (Negative Control)",
+  "description": "Secure Python code adhering to best practices; zero vulnerabilities expected.",
+  "is_negative_control": true,
+  "expected_findings": []
+}

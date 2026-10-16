@@ -1,0 +1,7 @@
+{
+  "fixture_id": "fix-16-clean-config-util",
+  "name": "Clean Configuration Utility (Negative Control)",
+  "description": "Safe configuration reading environment variables without credentials.",
+  "is_negative_control": true,
+  "expected_findings": []
+}
